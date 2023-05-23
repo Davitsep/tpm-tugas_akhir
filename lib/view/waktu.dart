@@ -1,144 +1,137 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:timezone/timezone.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 import 'dart:async';
 
 class Dateandtime extends StatefulWidget {
-  const Dateandtime({super.key});
+  const Dateandtime({Key? key}) : super(key: key);
 
   @override
   State<Dateandtime> createState() => _DateandtimeState();
 }
 
 class _DateandtimeState extends State<Dateandtime> {
-  DateTime datetime = DateTime(2021, 12, 24, 3, 30);
+  late DateTime datetime;
+  late Timer timer;
+  late String selectedTime;
+
+  @override
+  void initState() {
+    super.initState();
+    datetime = DateTime.now();
+    selectedTime = formatDate(datetime);
+    timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      setState(() {
+        datetime = datetime.add(const Duration(seconds: 1));
+        selectedTime = formatDate(datetime);
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer.cancel();
+  }
+
+  String formatDate(DateTime dateTime) {
+    return '${dateTime.year.toString()}/${dateTime.month.toString()}/${dateTime.day.toString()} : ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}:${dateTime.second.toString().padLeft(2, '0')}';
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text("Date and Time"), backgroundColor: Colors.white),
+        title: const Text("Date and Time"),
+        backgroundColor: Colors.white,
+      ),
       body: Container(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Card(
-                  child: SizedBox(
-                      height: 100.0,
-                      child: Center(
-                          child: Text(
-                        '${datetime.year.toString()}/${datetime.month.toString()}/${datetime.day.toString()} : ${datetime.hour.toString()}:${datetime.minute.toString()}:${datetime.second.toString()}',
-                        style: const TextStyle(
-                            fontSize: 30.0, fontFamily: 'Alkatra'),
-                      )))),
-              const SizedBox(
-                height: 20.0,
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Card(
+              child: SizedBox(
+                height: 100.0,
+                child: Center(
+                  child: Text(
+                    selectedTime,
+                    style:
+                        const TextStyle(fontSize: 30.0, fontFamily: 'Alkatra'),
+                  ),
+                ),
               ),
-              ElevatedButton(
-                  style:
-                      ElevatedButton.styleFrom(backgroundColor: Colors.black),
-                  onPressed: () async {
-                    var date = await pickDate();
-                    if (date == null) return;
-                    setState(() {
-                      datetime = date;
-                    });
-                  },
-                  child: const Text("Change Date")),
-              const SizedBox(
-                height: 20.0,
-              ),
-              ElevatedButton(
-                  style:
-                      ElevatedButton.styleFrom(backgroundColor: Colors.black),
-                  onPressed: () async {
-                    var time = await pickTime();
-                    if (time == null) return;
-                    setState(() {
-                      datetime = DateTime(
-                        datetime.year,
-                        datetime.month,
-                        datetime.day,
-                        time.hour,
-                        time.minute,
-                      );
-                    });
-                  },
-                  child: const Text("Change Time")),
-              const SizedBox(
-                height: 20.0,
-              ),
-              ElevatedButton(
-                  style:
-                      ElevatedButton.styleFrom(backgroundColor: Colors.black),
-                  onPressed: () {
-                    tz.initializeTimeZones();
-                    setState(() {
-                      var jakarta = tz.getLocation('Asia/Jakarta');
-                      datetime = tz.TZDateTime.now(jakarta);
-                    });
-                  },
-                  child: const Text("WIB")),
-              const SizedBox(
-                height: 20.0,
-              ),
-              ElevatedButton(
-                  style:
-                      ElevatedButton.styleFrom(backgroundColor: Colors.black),
-                  onPressed: () {
-                    tz.initializeTimeZones();
-                    setState(() {
-                      var makassar = tz.getLocation('Asia/Makassar');
-                      datetime = tz.TZDateTime.now(makassar);
-                    });
-                  },
-                  child: const Text("WITA")),
-              const SizedBox(
-                height: 20.0,
-              ),
-              ElevatedButton(
-                  style:
-                      ElevatedButton.styleFrom(backgroundColor: Colors.black),
-                  onPressed: () {
-                    tz.initializeTimeZones();
-                    setState(() {
-                      var jayapura = tz.getLocation('Asia/Jayapura');
-
-                      datetime = tz.TZDateTime.now(jayapura);
-                    });
-                  },
-                  child: const Text("WIT")),
-              const SizedBox(
-                height: 20.0,
-              ),
-              ElevatedButton(
-                  style:
-                      ElevatedButton.styleFrom(backgroundColor: Colors.black),
-                  onPressed: () {
-                    tz.initializeTimeZones();
-                    setState(() {
-                      var london = tz.getLocation('Europe/London');
-
-                      datetime = tz.TZDateTime.now(london);
-                    });
-                  },
-                  child: const Text("London")),
-            ],
-          )),
+            ),
+            const SizedBox(
+              height: 20.0,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+              onPressed: () {
+                tz.initializeTimeZones();
+                setState(() {
+                  var jakarta = tz.getLocation('Asia/Jakarta');
+                  datetime = tz.TZDateTime.now(jakarta);
+                  selectedTime = formatDate(datetime);
+                });
+              },
+              child: const Text("WIB"),
+            ),
+            const SizedBox(
+              height: 20.0,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+              onPressed: () {
+                tz.initializeTimeZones();
+                setState(() {
+                  var makassar = tz.getLocation('Asia/Makassar');
+                  datetime = tz.TZDateTime.now(makassar);
+                  selectedTime = formatDate(datetime);
+                });
+              },
+              child: const Text("WITA"),
+            ),
+            const SizedBox(
+              height: 20.0,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+              onPressed: () {
+                tz.initializeTimeZones();
+                setState(() {
+                  var jayapura = tz.getLocation('Asia/Jayapura');
+                  datetime = tz.TZDateTime.now(jayapura);
+                  selectedTime = formatDate(datetime);
+                });
+              },
+              child: const Text("WIT"),
+            ),
+            const SizedBox(
+              height: 20.0,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+              onPressed: () {
+                tz.initializeTimeZones();
+                setState(() {
+                  var london = tz.getLocation('Europe/London');
+                  datetime = tz.TZDateTime.now(london);
+                  selectedTime = formatDate(datetime);
+                });
+              },
+              child: const Text("London"),
+            ),
+          ],
+        ),
+      ),
     );
   }
+}
 
-  Future<DateTime?> pickDate() => showDatePicker(
-      context: context,
-      initialDate: datetime,
-      firstDate: DateTime(1990),
-      lastDate: DateTime(2030));
-
-  Future<TimeOfDay?> pickTime() => showTimePicker(
-      context: context,
-      initialTime: TimeOfDay(hour: datetime.hour, minute: datetime.minute));
+void main() {
+  runApp(MaterialApp(
+    title: 'Date and Time',
+    home: Dateandtime(),
+  ));
 }

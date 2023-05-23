@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preference/hive_service.dart';
 import 'package:shared_preference/shared_preferences_service.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
