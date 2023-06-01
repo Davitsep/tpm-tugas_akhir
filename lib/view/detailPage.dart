@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'favourite.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailPage extends StatefulWidget {
@@ -21,10 +20,7 @@ class _DetailPageState extends State<DetailPage> {
     _checkFavoriteStatus();
   }
 
-  void _checkFavoriteStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> favoriteTeams = prefs.getStringList('favoriteTeams') ?? [];
-  }
+  void _checkFavoriteStatus() async {}
 
   void _toggleFavorite() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

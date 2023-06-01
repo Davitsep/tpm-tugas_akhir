@@ -14,7 +14,6 @@ class NavPage extends StatefulWidget {
 }
 
 class _NavPageState extends State<NavPage> {
-  @override
   int _selectedIndex = 0;
   String tittle = '';
   Widget build(BuildContext context) {

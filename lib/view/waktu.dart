@@ -46,11 +46,13 @@ class _DateandtimeState extends State<Dateandtime> {
         backgroundColor: Colors.white,
       ),
       body: Container(
+        // color: Colors.yellow,
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Card(
+              // color: Colors.yellow,
               child: SizedBox(
                 height: 100.0,
                 child: Center(
@@ -127,11 +129,4 @@ class _DateandtimeState extends State<Dateandtime> {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    title: 'Date and Time',
-    home: Dateandtime(),
-  ));
 }

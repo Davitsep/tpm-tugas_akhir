@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import '../shared_preferences_service.dart';
-import 'login_page.dart';
-import 'navigation.dart';
 
 SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
 
